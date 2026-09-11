@@ -1,0 +1,24 @@
+Propagate vendored OpenCL C++ bindings include dir via OpenCL::OpenCL.
+
+QGIS falls back to external/opencl-clhpp when CL/cl2.hpp is not installed
+system-wide, and appends that path to OpenCL_INCLUDE_DIRS. qgis_core only
+links the imported OpenCL::OpenCL target, which does not consume that
+variable, so <CL/cl2.hpp> is not found at compile time (conda-forge's
+opencl-headers package ships only the C headers).
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -102,6 +102,12 @@
+             message(STATUS "Couldn't find OpenCL C++ headers, using internal: ${OPENCL_HPP_INCLUDE_DIR}")
+         endif()
+         set(OpenCL_INCLUDE_DIRS ${OpenCL_INCLUDE_DIRS} ${OPENCL_HPP_INCLUDE_DIR})
++        # OpenCL::OpenCL (imported target) does not pick up OpenCL_INCLUDE_DIRS.
++        # Propagate the C++ bindings include dir so #include <CL/cl2.hpp> works.
++        if(TARGET OpenCL::OpenCL AND OPENCL_HPP_INCLUDE_DIR)
++          set_property(TARGET OpenCL::OpenCL APPEND PROPERTY
++            INTERFACE_INCLUDE_DIRECTORIES "${OPENCL_HPP_INCLUDE_DIR}")
++        endif()
+     else()
+         message(STATUS "Couldn't find OpenCL: support DISABLED")
+     endif()

@@ -15,6 +15,8 @@ source:
     # fix segfault on import qgis.core on OSX (link extension modules
     # against Python::Module, not Python::Python / libpython)
     - 0007-link-python-module.patch
+    # OpenCL::OpenCL does not pick up vendored CL/cl2.hpp include path
+    - 0008-opencl-hpp-include.patch
 
 build:
   number: 0
