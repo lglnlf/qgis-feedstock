@@ -71,7 +71,7 @@ requirements:
     - qt6-positioning
     - qt6-3d
     - qscintilla2
-    - qca
+    - qca-qt6
     - qwt
     - qtkeychain-qt6
     # GDAL stack.
@@ -123,7 +123,7 @@ requirements:
     - qt6-positioning
     - qt6-3d
     - qscintilla2
-    - qca
+    - qca-qt6
     - qwt
     - qtkeychain-qt6
     - libgdal
