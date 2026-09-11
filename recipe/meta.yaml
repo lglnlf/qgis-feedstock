@@ -92,8 +92,6 @@ requirements:
     # Point Clouds. Need only C/C++ package
     - libpdal
     - laz-perf
-    - ocl-icd      # [linux]
-    - khronos-opencl-icd-loader      # [win or osx]
     - libgl-devel                            # [linux]
     - libegl-devel                           # [linux]
     - libopengl-devel                        # [linux]
@@ -159,8 +157,6 @@ requirements:
     - owslib
     - libpdal
     - laz-perf
-    - ocl-icd                                # [linux]
-    - khronos-opencl-icd-loader              # [win or osx]
 
 test:
   files:

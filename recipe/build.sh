@@ -14,6 +14,11 @@
 #   QGIS Docker build: https://github.com/qgis/QGIS/blob/master/.docker/qgis.dockerfile
 
 # BUILD
+# OpenCL is optional (GPU hillshade etc.). QGIS vendors a 2016-era cl2.hpp that
+# does not compile as C++20 (incomplete cl::Device in std::pair), and Apple has
+# deprecated OpenCL on macOS. Disable until upstream refreshes opencl-clhpp.
+OPENCL_OPTS="-D USE_OPENCL=FALSE"
+
 [[ -d build ]] || mkdir build
 cd build/
 
@@ -83,6 +88,7 @@ cmake ${CMAKE_ARGS} \
     -D WITH_PDAL=TRUE \
     -D WITH_EPT=TRUE \
     -D LazPerf_INCLUDE_DIR=$PREFIX/include \
+    $OPENCL_OPTS \
     $PLATFORM_OPTS \
     ..
 
