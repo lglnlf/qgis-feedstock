@@ -1,0 +1,17 @@
+Skip mac .icns install when QGIS_MAC_BUNDLE is OFF.
+
+APP_RESOURCES_DIR is only defined for the Mac bundle layout. With
+QGIS_MAC_BUNDLE=FALSE (Unix layout for conda), DESTINATION is empty and
+CMake errors with "install FILES given no DESTINATION".
+
+diff --git a/images/icons/mac/CMakeLists.txt b/images/icons/mac/CMakeLists.txt
+--- a/images/icons/mac/CMakeLists.txt
++++ b/images/icons/mac/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ 
+-if (WITH_DESKTOP)
++if (WITH_DESKTOP AND QGIS_MAC_BUNDLE)
+   file (GLOB ICONS *.icns)
+   install (FILES ${ICONS}
+            DESTINATION ${APP_RESOURCES_DIR})
+ endif()

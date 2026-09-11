@@ -17,6 +17,8 @@ source:
     - 0007-link-python-module.patch
     # OpenCL::OpenCL does not pick up vendored CL/cl2.hpp include path
     - 0008-opencl-hpp-include.patch
+    # mac .icns install needs APP_RESOURCES_DIR (only set with Mac bundle)
+    - 0009-skip-mac-icons-without-bundle.patch
 
 build:
   number: 0
