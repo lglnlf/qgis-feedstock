@@ -29,7 +29,9 @@ echo "Current work directory: $(pwd)"
 echo "PREFIX: $PREFIX"
 
 if [ $(uname) == Darwin ]; then
-  PLATFORM_OPTS="-D WITH_QSPATIALITE=FALSE -D QGIS_MACAPP_FRAMEWORK=FALSE"
+  # QGIS 4 renamed QGIS_MACAPP_FRAMEWORK -> QGIS_MAC_BUNDLE. Keep the Unix
+  # install layout (bin/, share/qgis/, ...) expected by conda and activate.sh.
+  PLATFORM_OPTS="-D WITH_QSPATIALITE=FALSE -D QGIS_MAC_BUNDLE=FALSE"
 else
   # Needed to find libGL.so
   export LDFLAGS="$LDFLAGS -Wl,-rpath-link,${BUILD_PREFIX}/${HOST}/sysroot"
@@ -94,18 +96,6 @@ cmake ${CMAKE_ARGS} \
 
 ninja -j$CPU_COUNT
 ninja install
-
-# QGIS gets bundled as a QGIS.app on MacOS (unless we creeate our own cmake)
-# https://github.com/qgis/QGIS/blob/master/mac/readme.txt
-if [ $(uname) == Darwin ]; then
-  # also create this dir or creating the conda package failes due to broken link
-  mkdir -p $PREFIX/QGIS.app/Contents/MacOS/share
-
-  # and create a link into the .app so we can run it.
-  ln -s $PREFIX/QGIS.app/Contents/MacOS/QGIS $PREFIX/bin/qgis
-  ln -s $PREFIX/bin/qgis_process.app/Contents/MacOS/qgis_process $PREFIX/bin/qgis_process
-fi
-
 
 # Install activate/deactivate scripts
 ACTIVATE_DIR=$PREFIX/etc/conda/activate.d
